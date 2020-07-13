@@ -49,10 +49,6 @@ class Format(
 
             for picture_type, details in pictures:
                 path = details['path']
-                description = details.get(
-                    'description',
-                    '',
-                )
 
                 picture_type_base10 = str(
                     picture_type,
@@ -60,21 +56,41 @@ class Format(
 
                 output_name = f'picture-{ picture_type_base10 }.vc'
 
+                command=[
+                    'mustup-mbp',
+                    '--type',
+                    picture_type_base10,
+                    '--path',
+                    path,
+                    '--output',
+                    output_name,
+                ]
+
+                try:
+                    description = details['description']
+                except KeyError:
+                    pass
+                else:
+                    command.append(
+                        '--description',
+                    )
+                    command.append(
+                        shlex.quote(
+                            description,
+                        ),
+                    )
+
                 rule = mustup.core.tup.rule.Rule(
                     inputs=[
                         path,
                     ],
-                    command=[
-                        'mustup-oggvorbis-mbp',
-                        picture_type_base10,
-                        path,
-                        description,
-                        '>',
-                        output_name,
-                    ],
+                    command=command,
                     outputs=[
                         output_name,
                     ],
+                )
+
+                rule.output(
                 )
 
                 vorbis_comment_files.append(
@@ -106,6 +122,9 @@ class Format(
                 ],
             )
 
+            rule.output(
+            )
+
     def process_track(
                 self,
                 metadata,
@@ -116,7 +135,7 @@ class Format(
         output_name = f'{ source_basename }.ogg'
 
         command = [
-            'oggenc',
+            '@(OGGENC)',
             '@(OGGENC_FLAGS)',
         ]
 
@@ -201,28 +220,60 @@ class Format(
 
                 for pair in sorted_pairs:
                     vorbis_comment_key = pair[0]
-                    vorbis_comment_value = pair[1]
+                    value = pair[1]
 
-                    try:
-                        parameter = Format.vorbiscomment_parameter_map[vorbis_comment_key]
-                    except KeyError:
-                        parameter = '--comment'
+                    multiple_values = isinstance(
+                        value,
+                        list,
+                    )
 
-                        argument = shlex.quote(
-                            f'{ vorbis_comment_key }={ vorbis_comment_value }',
-                        )
+                    if multiple_values:
+                        vorbis_comment_values = value
+
+                        for vorbis_comment_value in vorbis_comment_values:
+                            try:
+                                parameter = Format.vorbiscomment_parameter_map[vorbis_comment_key]
+                            except KeyError:
+                                parameter = '--comment'
+
+                                argument = shlex.quote(
+                                    f'{ vorbis_comment_key }={ vorbis_comment_value }',
+                                )
+                            else:
+                                argument = shlex.quote(
+                                    vorbis_comment_value,
+                                )
+
+                            command.append(
+                                parameter,
+                            )
+
+                            command.append(
+                                argument,
+                            )
                     else:
-                        argument = shlex.quote(
-                            vorbis_comment_value,
+                        vorbis_comment_value = value
+
+                        try:
+                            parameter = Format.vorbiscomment_parameter_map[vorbis_comment_key]
+                        except KeyError:
+                            parameter = '--comment'
+
+                            argument = shlex.quote(
+                                f'{ vorbis_comment_key }={ vorbis_comment_value }',
+                            )
+                        else:
+                            argument = shlex.quote(
+                                vorbis_comment_value,
+                            )
+
+                        command.append(
+                            parameter,
                         )
 
-                    command.append(
-                        parameter,
-                    )
-
-                    command.append(
-                        argument,
-                    )
+                        command.append(
+                            argument,
+                        )
 
         command.extend(
             [
