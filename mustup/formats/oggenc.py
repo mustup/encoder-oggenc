@@ -134,6 +134,10 @@ class Format(
             ):
         output_name = f'{ source_basename }.ogg'
 
+        inputs = [
+            source_name,
+        ]
+
         command = [
             '@(OGGENC)',
             '@(OGGENC_FLAGS)',
@@ -308,10 +312,12 @@ class Format(
                 ],
             )
 
+            inputs.append(
+                'pictures.vc',
+            )
+
         rule = mustup.core.tup.rule.Rule(
-            inputs=[
-                source_name,
-            ],
+            inputs=inputs,
             command=command,
             outputs=[
                 output_name,
