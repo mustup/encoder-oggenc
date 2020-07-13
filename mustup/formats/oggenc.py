@@ -65,7 +65,7 @@ class Format(
                         path,
                     ],
                     command=[
-                        'mustup-ogg-mbp',
+                        'mustup-oggvorbis-mbp',
                         picture_type_base10,
                         path,
                         description,
@@ -249,7 +249,6 @@ class Format(
                     '--append',
                     '--raw',
                     '--commentfile',
-                    # FIXME: actual path (../ if needed)
                     'pictures.vc',
                     '--',
                     shlex.quote(
