@@ -47,7 +47,7 @@ class Format(
             iterator = pictures.items(
             )
 
-            for picture_type, details in pictures:
+            for picture_type, details in iterator:
                 path = details['path']
 
                 picture_type_base10 = str(
