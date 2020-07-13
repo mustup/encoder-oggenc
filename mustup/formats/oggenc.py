@@ -61,7 +61,9 @@ class Format(
                     '--type',
                     picture_type_base10,
                     '--path',
-                    path,
+                    shlex.quote(
+                        path,
+                    ),
                     '--output',
                     output_name,
                 ]
