@@ -32,7 +32,81 @@ class Format(
         'DATE': '--date',
     }
 
-    def process(
+    def process_directory(
+                self,
+                metadata,
+            ):
+        try:
+            pictures = metadata['pictures']['APIC']
+        except KeyError:
+            pass
+        else:
+            vorbis_comment_files = [
+            ]
+
+            iterator = pictures.items(
+            )
+
+            for picture_type, details in pictures:
+                path = details['path']
+                description = details.get(
+                    'description',
+                    '',
+                )
+
+                picture_type_base10 = str(
+                    picture_type,
+                )
+
+                output_name = f'picture-{ picture_type_base10 }.vc'
+
+                rule = mustup.core.tup.rule.Rule(
+                    inputs=[
+                        path,
+                    ],
+                    command=[
+                        'mustup-ogg-mbp',
+                        picture_type_base10,
+                        path,
+                        description,
+                        '>',
+                        output_name,
+                    ],
+                    outputs=[
+                        output_name,
+                    ],
+                )
+
+                vorbis_comment_files.append(
+                    output_name,
+                )
+
+            command = [
+                'cat',
+                '--',
+            ]
+
+            command.extend(
+                vorbis_comment_files,
+            )
+
+            command.append(
+                '>',
+            )
+
+            command.append(
+                'pictures.vc',
+            )
+
+            rule = mustup.core.tup.rule.Rule(
+                inputs=vorbis_comment_files,
+                command=command,
+                outputs=[
+                    'pictures.vc',
+                ],
+            )
+
+    def process_track(
                 self,
                 metadata,
                 source_basename,
@@ -51,6 +125,10 @@ class Format(
         except KeyError:
             pass
         else:
+            command.append(
+                '--utf8',
+            )
+
             # Tags are sorted to ensure consistent ordering of the command line arguments.
             # If ordering varied, tup would run the commands again.
 
@@ -158,6 +236,27 @@ class Format(
                 ),
             ],
         )
+
+        try:
+            pictures = metadata['pictures']['APIC']
+        except KeyError:
+            pass
+        else:
+            command.extend(
+                [
+                    '&&',
+                    'vorbiscomment',
+                    '--append',
+                    '--raw',
+                    '--commentfile',
+                    # FIXME: actual path (../ if needed)
+                    'pictures.vc',
+                    '--',
+                    shlex.quote(
+                        output_name,
+                    ),
+                ],
+            )
 
         rule = mustup.core.tup.rule.Rule(
             inputs=[
