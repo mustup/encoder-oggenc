@@ -165,7 +165,7 @@ class Encoder(
             except KeyError:
                 pass
             else:
-                iterator = Format.tag_parameter_map.items(
+                iterator = Encoder.tag_parameter_map.items(
                 )
 
                 sorted_pairs = sorted(
@@ -241,7 +241,7 @@ class Encoder(
 
                         for vorbis_comment_value in vorbis_comment_values:
                             try:
-                                parameter = Format.vorbiscomment_parameter_map[vorbis_comment_key]
+                                parameter = Encoder.vorbiscomment_parameter_map[vorbis_comment_key]
                             except KeyError:
                                 parameter = '--comment'
 
@@ -264,7 +264,7 @@ class Encoder(
                         vorbis_comment_value = value
 
                         try:
-                            parameter = Format.vorbiscomment_parameter_map[vorbis_comment_key]
+                            parameter = Encoder.vorbiscomment_parameter_map[vorbis_comment_key]
                         except KeyError:
                             parameter = '--comment'
 
