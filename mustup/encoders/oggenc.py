@@ -1,7 +1,7 @@
 import logging
 import shlex
 
-import mustup.core.format
+import mustup.core.encoder
 import mustup.core.tup.rule
 
 logger = logging.getLogger(
@@ -9,8 +9,8 @@ logger = logging.getLogger(
 )
 
 
-class Format(
-            mustup.core.format.Format,
+class Encoder(
+            mustup.core.encoder.Encoder,
         ):
     supported_extensions = {
         '.wave',

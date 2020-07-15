@@ -9,7 +9,7 @@ setuptools.setup(
         'mustup_core == 0.1',
         'mustup_mbp == 0.1',
     ],
-    name='mustup_format_oggenc',
+    name='mustup_encoder_oggenc',
     packages=packages,
     python_requires='>= 3.8',
     version='0.1',
