@@ -86,6 +86,9 @@ class Format(
                     inputs=[
                         path,
                     ],
+                    caret_flags=[
+                        'o',
+                    ],
                     command=command,
                     outputs=[
                         output_name,
