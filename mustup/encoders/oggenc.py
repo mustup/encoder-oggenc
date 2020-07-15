@@ -137,16 +137,19 @@ class Encoder(
                 source_name,
                 transformations,
             ):
-        output_name = f'{ source_basename }.ogg'
-
         inputs = [
             source_name,
+        ]
+
+        order_only_inputs = [
         ]
 
         command = [
             '@(OGGENC)',
             '@(OGGENC_FLAGS)',
         ]
+
+        output_name = f'{ source_basename }.ogg'
 
         try:
             tags = metadata['tags']
@@ -317,13 +320,14 @@ class Encoder(
                 ],
             )
 
-            inputs.append(
+            order_only_inputs.append(
                 'pictures.vc',
             )
 
         rule = mustup.core.tup.rule.Rule(
             inputs=inputs,
             command=command,
+            order_only_inputs=order_only_inputs,
             outputs=[
                 output_name,
             ],
