@@ -12,7 +12,9 @@ logger = logging.getLogger(
 class Encoder(
             mustup.core.encoder.Encoder,
         ):
-    supported_extensions = {
+    output_extension = 'ogg'
+
+    supported_input_extensions = {
         '.wave',
     }
 
@@ -145,7 +147,7 @@ class Encoder(
             '@(OGGENC_FLAGS)',
         ]
 
-        output_name = f'{ source_basename }.ogg'
+        output_name = f'{ source_basename }.{ Encoder.output_extension }'
 
         try:
             tags = metadata['tags']
