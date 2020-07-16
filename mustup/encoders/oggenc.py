@@ -324,7 +324,7 @@ class Encoder(
             command=command,
             inputs=[
                 source_name,
-            ]
+            ],
             order_only_inputs=order_only_inputs,
             outputs=[
                 output_name,
