@@ -2,7 +2,7 @@ import logging
 import shlex
 
 import mustup.core.encoder
-import mustup.core.tup.rule
+import mustup.tup.rule
 
 logger = logging.getLogger(
     __name__,
@@ -82,7 +82,7 @@ class Encoder(
                         ),
                     )
 
-                rule = mustup.core.tup.rule.Rule(
+                rule = mustup.tup.rule.Rule(
                     inputs=[
                         path,
                     ],
@@ -119,7 +119,7 @@ class Encoder(
                 'pictures.vc',
             )
 
-            rule = mustup.core.tup.rule.Rule(
+            rule = mustup.tup.rule.Rule(
                 inputs=vorbis_comment_files,
                 command=command,
                 outputs=[
@@ -320,7 +320,7 @@ class Encoder(
                 'pictures.vc',
             )
 
-        rule = mustup.core.tup.rule.Rule(
+        rule = mustup.tup.rule.Rule(
             command=command,
             inputs=[
                 source_name,
