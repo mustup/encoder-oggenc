@@ -137,10 +137,6 @@ class Encoder(
                 source_name,
                 transformations,
             ):
-        inputs = [
-            source_name,
-        ]
-
         order_only_inputs = [
         ]
 
@@ -325,8 +321,10 @@ class Encoder(
             )
 
         rule = mustup.core.tup.rule.Rule(
-            inputs=inputs,
             command=command,
+            inputs=[
+                source_name,
+            ]
             order_only_inputs=order_only_inputs,
             outputs=[
                 output_name,
